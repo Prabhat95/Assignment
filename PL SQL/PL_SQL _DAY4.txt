@@ -1,0 +1,59 @@
+1)
+create procedure secure_dml1
+is
+     begin
+            if ( TO_CHAR(sysdate, 'MONTH')!= ('MARCH')) then
+             dbms_output.put_line('Modification is not allowed');
+           end if;
+end;
+
+create or replace trigger check_dept after  update or delete or insert  on member 
+begin 
+     
+secure_dml1;
+end;
+
+
+=================================================================================================
+
+2) create or replace trigger TR_CASCADE_CHANGE
+AFTER update of deptno on dept
+begin
+alter table dept add constraint FK1 (deptno) references employee(deptno);
+INITIALLY DEFERRED DEFERRABLE;
+END;
+
+
+
+select deptno into newdeptno from dept;
+insert into employee ( ) values (:new.deptno, :new.dname, :new.loc);
+end;
+
+
+select * from  employee
+alter table employee add job varchar2(20)
+alter table employee add commission varchar2(20)
+
+update employee set commission=110 where job in ('clerk')
+
+=============================================================================================
+3)
+CREATE OR REPLACE TRIGGER TR_CHECK_COMM
+before insert or update or delete on employee
+for each row
+declare
+comm number(10);
+begin
+select commission into comm from employee where job='Salesman';
+if(comm<100) then
+update employee set commission=comm+110 where job='Salesman';
+end if;
+end;
+
+drop trigger TR_CHECK_COMM
+
+insert into employee values(17,'Ashraf','B',10-Dec-17,15000,20,'Salesman',90);
+============================================================================================
+
+
+
